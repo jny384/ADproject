@@ -1,0 +1,21 @@
+setDifficulty(first try).py는 그냥 처음에 시도해본거고
+
+그걸 바탕으로
+GameMain.py
+GameStart!.py
+GetCard.py
+가 나온거임
+
+GameStart!.py 컴파일 해보고 실행해보면 알겠지만 많이 한 건 없어
+이게 어떤 방식이냐면, GameStart!.py 에서 컴파일 하면 QDialog() 라는 게 실행돼서
+팝업창이 하나 뜨는데 그게 난이도 선택 창이야
+
+그리고 난이도를 선택하면 또 Dialog가 나오는게 아니라 이번에는 다른 클래스 파일을 실행하게 되는거야
+그 새롭게 실행되는 클래스가 GameMain.py
+
+오늘은 여기까지만 할겡 ㅎㅎ
+GameMain.py에 대충 카드 뽑는거랑 패 적용하는거 만들어봤으니까 필요하다 싶으면 써
+
+내가 궁금한건 GameStart!.py에서 GameMain.py에 포함된 변수인 life나 target에 영향을 주는 방법이 궁금함
+그래서 GameStart!.py 55번줄부터 clickEasy(self)랑 clickNormal(self)에 다양한 시도를 해봤는데
+모르겠어용 이거 알면 고쳐두고 모르면 담에 같이 ㄱ
