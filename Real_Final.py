@@ -264,20 +264,27 @@ class MainWindow(QWidget):
 
         elif key == "맞추기": # Guess 버튼 눌렀을 때
             # 패를 맞췄을 때
-            if self.checkText.text() == self.check_info.replace("white","").replace("black","").replace("\n",""):
-                self.againAndEnd_dialog = QDialog()
-                self.complete_check.append(self.check_info)
-                self.cardSort("computer")
-                self.againAndEnd_open()
-                s.subTarget(1)
+            try :
+                int(self.checkText.text())
 
-            elif self.checkText.text() == "" : # 텍스트 필드가 비어있을 때
-                self.error_dialog = QDialog()
-                self.Empty_open()
+                if self.checkText.text() == self.check_info.replace("white","").replace("black","").replace("\n",""):
+                    self.againAndEnd_dialog = QDialog()
+                    self.complete_check.append(self.check_info)
+                    self.cardSort("computer")
+                    self.againAndEnd_open()
+                    s.subTarget(1)
 
-            else: # 패를 못 맞췄을 때
-                self.false_dialog = QDialog()
-                self.false_open()
+                else:  # 패를 못 맞췄을 때
+                    self.false_dialog = QDialog()
+                    self.false_open()
+
+            except :
+                if self.checkText.text() == "": # 텍스트 필드가 비어있을 때
+                    self.error_dialog = QDialog()
+                    self.Empty_open()
+                else :
+                    self.int_dialog = QDialog()
+                    self.String_open()
 
         elif key == "다음": # 틀렸을 때 창 끄기
             self.false_dialog.close()
@@ -290,8 +297,11 @@ class MainWindow(QWidget):
         elif key == "취소": # 맞추기 창 끄기
             self.check_dialog.close()
 
-        elif key == "Error" : # 에러 창 끄기
+        elif key == "Empty" : # 에러 창 끄기
             self.error_dialog.close()
+
+        elif key == "Integer" :
+            self.int_dialog.close()
 
         elif key == "더 맞추기": # 패를 맞췄을 때 재도전
             # 재도전 창 닫기
@@ -395,7 +405,7 @@ class MainWindow(QWidget):
         self.false_dialog.show()
 
     def Empty_open(self):
-        errorButton = QPushButton("Error", self.error_dialog)
+        errorButton = QPushButton("Empty", self.error_dialog)
 
         errorButton.clicked.connect(self.buttonClicked)
 
@@ -406,6 +416,19 @@ class MainWindow(QWidget):
         self.error_dialog.setWindowModality(Qt.ApplicationModal)
         self.error_dialog.resize(300, 185)
         self.error_dialog.show()
+
+    def String_open(self):
+        intButton = QPushButton("Integer", self.int_dialog)
+
+        intButton.clicked.connect(self.buttonClicked)
+
+        intButton.setGeometry(120, 85, 60, 30)
+
+        # QDialog 세팅
+        self.int_dialog.setWindowTitle('정수를 입력해주세요!')
+        self.int_dialog.setWindowModality(Qt.ApplicationModal)
+        self.int_dialog.resize(300, 185)
+        self.int_dialog.show()
 
     def gameEnd_open(self, state): # 게임 종료 창
         gameEndButton = QPushButton("게임 종료", self.gameEnd_dialog)
