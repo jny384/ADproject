@@ -14,8 +14,8 @@ class GameStart(QWidget):
 
     def initUI(self):
         # 게임 시작 화면
-        self.startButton = QPushButton("게임실행", self)
-        self.exitButton = QPushButton("게임종료", self)
+        self.startButton = QPushButton("게임 시작", self)
+        self.exitButton = QPushButton("나가기", self)
 
         # QButton 위젯 생성
         self.startButton.clicked.connect(self.difficulty_open)
@@ -30,7 +30,7 @@ class GameStart(QWidget):
         self.setWindowTitle("나를 맞춰봐!")
         self.show()
 
-    def gameExit(self):
+    def gameExit(self): # 게임 종료
         sys.exit()
 
     def difficulty_open(self):
@@ -54,7 +54,7 @@ class GameStart(QWidget):
         self.dif_dialog.resize(300, 200)
         self.dif_dialog.show()
 
-    def dif_dialog_close(self):
+    def dif_dialog_close(self): # 난이도 창 닫기
         self.dif_dialog.close()
 
     ### 난이도에 따른 target 설정 후 MainWindow 열기 ###
@@ -206,7 +206,7 @@ class MainWindow(QWidget):
                     cardButton.setStyleSheet('color:rgba(255, 255, 255, 0%);background:black')
                     self.computerCardDic[i] = btn['Color'] + "\n" + str(btn['Number'])
                     i += 1
-            else:
+            else: # 하얀 패일 때
                 cardButton.setStyleSheet('color:black;background:white')
                 if cardButton.text() in self.complete_check: # 맞췄을 때 카드 패 보여주기
                     cardButton.setStyleSheet('color:rgba(0, 0, 0, 100%);background:white')
@@ -216,6 +216,7 @@ class MainWindow(QWidget):
                     self.computerCardDic[f'{i}'] = btn['Color'] + "\n" + str(btn['Number'])
                     i += 1
 
+            # 버튼 크기 & 디자인
             cardButton.setMaximumHeight(170)
             cardButton.setMaximumWidth(100)
             cardButton.setFont(QtGui.QFont("궁서", 15))
@@ -230,6 +231,10 @@ class MainWindow(QWidget):
         # 버튼 만들기
         whiteDrawButton = Button(("white\nCard\nDraw"), self.buttonClicked)
         blackDrawButton = Button(("black\nCard\nDraw"), self.buttonClicked)
+
+        # 버튼 디자인 설정
+        whiteDrawButton.setStyleSheet('color:black;background:white')
+        blackDrawButton.setStyleSheet('color:white;background:black')
 
         # 폰트 설정
         whiteDrawButton.setFont(QtGui.QFont("궁서", 10))
@@ -257,7 +262,7 @@ class MainWindow(QWidget):
             self.check_info = key
             self.check_open()
 
-        elif key == "Send": # Send 버튼 눌렀을 때
+        elif key == "맞추기": # Guess 버튼 눌렀을 때
             # 패를 맞췄을 때
             if self.checkText.text() == self.check_info.replace("white","").replace("black","").replace("\n",""):
                 self.againAndEnd_dialog = QDialog()
@@ -274,7 +279,7 @@ class MainWindow(QWidget):
                 self.false_dialog = QDialog()
                 self.false_open()
 
-        elif key == "Ok":
+        elif key == "다음": # 틀렸을 때 창 끄기
             self.false_dialog.close()
             self.check_dialog.close()
             self.life-=1
@@ -282,13 +287,13 @@ class MainWindow(QWidget):
             self.lifeLabelValue.setText(str(self.life))
             self.turnLabelValue.setText(str(self.turn))
 
-        elif key == "Cancel": # 맞추기 창 끄기
+        elif key == "취소": # 맞추기 창 끄기
             self.check_dialog.close()
 
         elif key == "Error" : # 에러 창 끄기
             self.error_dialog.close()
 
-        elif key == "Again": # 패를 맞췄을 때 재도전
+        elif key == "더 맞추기": # 패를 맞췄을 때 재도전
             # 재도전 창 닫기
             self.againAndEnd_dialog.close()
             self.check_dialog.close()
@@ -296,10 +301,10 @@ class MainWindow(QWidget):
             self.again_dialog = QDialog()
             self.again_open()
 
-        elif key == "Retry" : # 재도전임을 알리는 창
+        elif key == "Ok" : # 재도전임을 알리는 창
             self.again_dialog.close()
 
-        elif key == "End": # 라운드 종료
+        elif key == "끝내기": # 라운드 종료
             self.againAndEnd_dialog.close()
             self.check_dialog.close()
             self.turn += 1
@@ -319,7 +324,7 @@ class MainWindow(QWidget):
             else:
                 pass
 
-        elif key == "Game End": # 게임 종료
+        elif key == "게임 종료": # 게임 종료
             sys.exit()
 
         if target == 0: # 패를 다 맞췄을 때
@@ -331,8 +336,8 @@ class MainWindow(QWidget):
     def check_open(self): # 맞추기 창
         self.checkText = QLineEdit("", self.check_dialog)
 
-        sendButton = QPushButton("Send", self.check_dialog)
-        cancelButton = QPushButton("Cancel", self.check_dialog)
+        sendButton = QPushButton("맞추기", self.check_dialog)
+        cancelButton = QPushButton("취소", self.check_dialog)
 
         sendButton.clicked.connect(self.buttonClicked)
         cancelButton.clicked.connect(self.buttonClicked)
@@ -348,8 +353,8 @@ class MainWindow(QWidget):
         self.check_dialog.show()
 
     def againAndEnd_open(self): # 맞췄을 때 재도전 선택 창
-        againButton = QPushButton("Again", self.againAndEnd_dialog)
-        endButton = QPushButton("End", self.againAndEnd_dialog)
+        againButton = QPushButton("더 맞추기", self.againAndEnd_dialog)
+        endButton = QPushButton("끝내기", self.againAndEnd_dialog)
 
         againButton.clicked.connect(self.buttonClicked)
         endButton.clicked.connect(self.buttonClicked)
@@ -364,11 +369,11 @@ class MainWindow(QWidget):
         self.againAndEnd_dialog.show()
 
     def again_open(self):
-        errorButton = QPushButton("Retry", self.again_dialog)
+        againButton = QPushButton("Ok", self.again_dialog)
 
-        errorButton.clicked.connect(self.buttonClicked)
+        againButton.clicked.connect(self.buttonClicked)
 
-        errorButton.setGeometry(120, 85, 60, 30)
+        againButton.setGeometry(120, 85, 60, 30)
 
         # QDialog 세팅
         self.again_dialog.setWindowTitle('재도전! 패를 선택해주세요')
@@ -377,11 +382,11 @@ class MainWindow(QWidget):
         self.again_dialog.show()
 
     def false_open(self):
-        okButton = QPushButton("Ok", self.false_dialog)
+        nextButton = QPushButton("다음", self.false_dialog)
 
-        okButton.clicked.connect(self.buttonClicked)
+        nextButton.clicked.connect(self.buttonClicked)
 
-        okButton.setGeometry(120, 85, 60, 30)
+        nextButton.setGeometry(120, 85, 60, 30)
 
         # QDialog 세팅
         self.false_dialog.setWindowTitle('틀렸습니다!')
@@ -403,7 +408,7 @@ class MainWindow(QWidget):
         self.error_dialog.show()
 
     def gameEnd_open(self, state): # 게임 종료 창
-        gameEndButton = QPushButton("Game End", self.gameEnd_dialog)
+        gameEndButton = QPushButton("게임 종료", self.gameEnd_dialog)
         if state == "lose": # 미션 실패
             stateLabel = QLabel("Game Over", self.gameEnd_dialog)
             stateLabel.setStyleSheet('color:rgba(255, 0, 0, 100%);')
@@ -424,7 +429,7 @@ class MainWindow(QWidget):
         self.gameEnd_dialog.resize(300, 185)
         self.gameEnd_dialog.show()
 
-class Button(QToolButton):
+class Button(QToolButton): # 버튼 설정
     def __init__(self, text, callback):
         super().__init__()
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
