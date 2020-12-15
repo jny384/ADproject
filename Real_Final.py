@@ -291,10 +291,13 @@ class MainWindow(QWidget):
         elif key == "Again": # 패를 맞췄을 때 재도전
             # 재도전 창 닫기
             self.againAndEnd_dialog.close()
+            self.check_dialog.close()
 
-            # 맞추기 창 다시 열기
-            self.check_info = key
-            self.check_open()
+            self.again_dialog = QDialog()
+            self.again_open()
+
+        elif key == "Retry" : # 재도전임을 알리는 창
+            self.again_dialog.close()
 
         elif key == "End": # 라운드 종료
             self.againAndEnd_dialog.close()
@@ -359,6 +362,19 @@ class MainWindow(QWidget):
         self.againAndEnd_dialog.setWindowModality(Qt.ApplicationModal)
         self.againAndEnd_dialog.resize(300, 185)
         self.againAndEnd_dialog.show()
+
+    def again_open(self):
+        errorButton = QPushButton("Retry", self.again_dialog)
+
+        errorButton.clicked.connect(self.buttonClicked)
+
+        errorButton.setGeometry(120, 85, 60, 30)
+
+        # QDialog 세팅
+        self.again_dialog.setWindowTitle('재도전! 패를 선택해주세요')
+        self.again_dialog.setWindowModality(Qt.ApplicationModal)
+        self.again_dialog.resize(300, 185)
+        self.again_dialog.show()
 
     def false_open(self):
         okButton = QPushButton("Ok", self.false_dialog)
